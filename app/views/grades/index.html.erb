@@ -1,0 +1,24 @@
+<div class="jumbotron">
+  <h1 class="text-center">Grades</h1>
+  <hr class="my-4">
+  <%= link_to "Add New Grade", new_grade_path, class: "btn btn-primary" %>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Grade</th>
+      <th scope="col" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @grades.each do |grade| %>
+      <tr>
+        <th scope="row"><%= grade.id %></th>
+        <td><%= grade.grade_level %></td>
+        <td><%= link_to "Edit", edit_grade_path(grade.id), class: "btn btn-sm btn-primary" %></td>
+        <td><%= link_to "Delete", grade_path(grade.id), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

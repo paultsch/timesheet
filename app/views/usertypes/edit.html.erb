@@ -1,0 +1,13 @@
+<h1 class="text-center">Edit a Grade</h1>
+
+<%= form_for @usertype do |f| %>
+  <div class="field">
+    <%= f.label :user_type %>
+    <%= f.text_field :user_type %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class:'btn btn-primary'%>
+  </div>
+
+<% end %>

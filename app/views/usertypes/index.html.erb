@@ -1,0 +1,25 @@
+<div class="jumbotron">
+  <h1 class="text-center">User Types</h1>
+  <hr class="my-4">
+  <%= link_to "Add New User Type", new_usertype_path, class: "btn btn-primary" %>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">User Type</th>
+      <th scope="col" class="text-center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @usertypes.each do |usertype| %>
+      <tr>
+        <th scope="row"><%= usertype.id %></th>
+        <td><%= usertype.user_type %></td>
+        <td><%= link_to "Edit", edit_usertype_path(usertype.id), class: "btn btn-sm btn-primary" %></td>
+        <td><%= link_to "Delete", usertype_path(usertype.id) , class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
