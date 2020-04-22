@@ -1,0 +1,51 @@
+<div class="jumbotron">
+  <h1 class="text-center"><%= @user.full_name %></h1>
+  <h4 class="text-center"><%= @user.usertype.user_type %> </h4>
+  <hr class="my-4">
+  <%= link_to "Edit User", edit_user_path(@user), class: "btn btn-primary" %>
+</div>
+
+<% if @students.count > 0 %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Grade</th>
+      <th scope="col">Email</th>
+      <th scope="col" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @students.each do |student| %>
+      <tr>
+        <th scope="row"><%= student.id %></th>
+        <td><%= link_to student.full_name, user_path(student), method: :get %></td>
+        <td><%= student.grade.grade_level %></td>
+        <td><%= student.email %></td>
+        <td><%#= link_to "Edit", edit_user_path(user.id), class: "btn btn-sm btn-primary" %></td>
+        <td><%#= link_to "Delete", user_path(user.id), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+
+<% if @sheets.count > 0 %>
+  <%= month_calendar do |date| %>
+    <%= date.day %>
+    <% @sheets.each do |sheet| %>
+      <% if sheet.date == date %>
+        <% if sheet.signed_in == true %>
+          <div class="text-center">
+            <%= link_to "Done", unsign_in_student_sheets_path(@user.id, date: date), class: "btn btn-success btn-sm", method: :put, data: {confirm: 'You are about to unsign in. Are you sure you want to do that?'} %>
+          </div>
+        <% else %>
+          <div class="text-center">
+            <%= link_to "Sign In",  sign_in_student_sheets_path(@user.id, date: date), class: "btn btn-danger btn-sm", method: :put %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

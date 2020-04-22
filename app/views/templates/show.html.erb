@@ -1,0 +1,21 @@
+<div class="jumbotron">
+  <h1 class="text-center"><%= @template.template_name %></h1>
+  <hr class="my-4">
+  <%= link_to "Edit Template", edit_template_path(@template), class: "btn btn-primary" %>
+  <%= link_to "Add Dates", '#', class: "btn btn-success", method: :delete, data: {confirm: 'Are you sure?'} %>
+  <%= link_to "Delete Dates", '#', class: "btn btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
+  <%= link_to "Delete", '#', class: "btn btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
+</div>
+
+<%= month_calendar do |date| %>
+  <%= date.day %>
+  <% if @schedule_dates.include?(date) %>
+    <div class="text-center">
+      <%= link_to "Delete",  delete_schedule_date_templates_path(params[:id], date: date), class: "btn btn-sm btn-danger", method: :delete %>
+    </div>
+  <% else %>
+    <div class="text-center">
+      <%= link_to "Add", add_schedule_date_templates_path(params[:id], date: date), class: "btn btn-sm btn-success", method: :post %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,82 @@
+<div class="jumbotron">
+  <h1 class="text-center">Building Templates</h1>
+</div>
+
+<div class="row">
+  <div class="col-sm">
+    <div class="text-center">
+        <h1>Template Types <%= link_to "Add", new_templatetype_path, class: "btn btn-primary" %></h1>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Template Type</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @templatetypes.each do |templatetype| %>
+          <tr>
+            <th scope="row"><%= templatetype.id %></th>
+            <td><%= link_to templatetype.template_type, edit_templatetype_path(templatetype)  %></td>
+            <td><%= link_to "Delete", '#', class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-sm">
+    <div class="text-center">
+        <h1>Year <%= link_to "Add", new_year_path, class: "btn btn-primary" %></h1>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Year</th>
+          <th scope="col">Active</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @years.each do |year| %>
+          <tr>
+            <th scope="row"><%= year.id %></th>
+            <td><%= link_to year.year, edit_year_path(year)  %></td>
+            <td><%= year.current_year  %></td>
+            <td><%= link_to "Delete", '#', class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm">
+    <div class="text-center">
+        <h1>Active Templates <%= link_to "Add", new_template_path, class: "btn btn-primary" %></h1>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Template</th>
+          <th scope="col" class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @templates.each do |template| %>
+          <tr>
+            <th scope="row"><%= template.id %></th>
+            <td><%= link_to template.template_name, template_path(template)  %></td>
+            <td><%= link_to "Edit", edit_template_path(template), class: "btn btn-sm btn-primary" %></td>
+            <td><%= link_to "Add Dates", '#', class: "btn btn-sm btn-success" %></td>
+            <td><%= link_to "Delete Dates", '#', class: "btn btn-sm btn-danger" %></td>
+            <td><%= link_to "Delete", '#', class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

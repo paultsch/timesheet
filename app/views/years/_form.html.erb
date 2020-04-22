@@ -1,0 +1,16 @@
+<%= form_for @year do |f| %>
+  <div class="field">
+    <%= f.label :year %>
+    <%= f.text_field :year %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_year %>
+    <%= f.check_box :current_year %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit(@year.new_record? ? "Create" : "Update", class:'btn btn-primary')%>
+  </div>
+
+<% end %>

@@ -10,29 +10,37 @@
           <%= link_to "Dashboard", root_path, class:"nav-link" %>
         </li>
         <li class="nav-item">
-          <%= link_to "My Friends", '#', class:"nav-link" %>
+          <%= link_to "Students", users_students_path, class:"nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Supervisors", users_supervisors_path, class:"nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Add User", new_user_path, class:"nav-link" %>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
         <%# if user_signed_in? %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Schedule Setup
+              Schedule
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <%= link_to "Template Setup", templates_path, class: "dropdown-item" %>
+              <div class="dropdown-divider"></div>
               <%= link_to "Student Grades", grades_path, class: "dropdown-item" %>
               <%= link_to "User Types", usertypes_path, class: "dropdown-item" %>
-
-                <%#= fa_icon 'edit'%><!-- Edit Profile -->
-              <%# end %>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
-          <li class="nav-item">
-            <%#= link_to "Logout", destroy_user_session_path, class: "btn btn-danger logout-button", method: :delete %>
-          </li>
+          <% if user_signed_in? %>
+            <li class="nav-item">
+              <%= link_to "Logout", destroy_user_session_path, class: "btn btn-danger", method: :delete %>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
+            </li>
+          <% end %>
         <%# end %>
       </ul>
       <form class="form-inline my-2 my-lg-0">

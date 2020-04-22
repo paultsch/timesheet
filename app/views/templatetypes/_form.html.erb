@@ -1,0 +1,11 @@
+<%= form_for @templatetype do |f| %>
+  <div class="field">
+    <%= f.label :template_type %>
+    <%= f.text_field :template_type %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit(@templatetype.new_record? ? "Create" : "Update", class:'btn btn-primary')%>
+  </div>
+
+<% end %>

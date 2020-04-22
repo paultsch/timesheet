@@ -11,7 +11,7 @@ before_action :set_usertype, only: [:edit, :update, :destroy]
       flash[:notice] = "The user type has been saved."
       redirect_to usertypes_path
     else
-      flash[:notice] = @usertype.errors.full_messages.first
+      flash[:alert] = @usertype.errors.full_messages.first
       redirect_to new_usertype_path
     end
   end

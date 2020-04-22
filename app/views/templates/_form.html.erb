@@ -1,0 +1,17 @@
+<%= form_for @template do |f| %>
+  <div class="field">
+    <%= f.label :templatetype_id %>
+    <%= collection_select(:template, :templatetype_id, Templatetype.all, :id, :template_type) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :year_id %>
+    <%= collection_select(:template, :year_id, Year.all, :id, :year) %>
+
+  </div>
+
+  <div class="actions">
+    <%= f.submit(@template.new_record? ? "Create" : "Update", class:'btn btn-primary')%>
+  </div>
+
+<% end %>

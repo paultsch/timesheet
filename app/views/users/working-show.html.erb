@@ -1,0 +1,28 @@
+<% if @sheets.count > 0 %>
+  <%= form_tag update_multiple_users_path, method: :put do %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Sign In</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sheets.each do |date| %>
+          <%= fields_for "dates[]", date do |f| %>
+            <tr>
+              <td><%= date.date %></td>
+              <td><%= f.check_box :signed_in %></td>
+              <td><%= link_to "Delete", '#', class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="form-group">
+      <%= hidden_field_tag(:id, @user.id) %>
+      <%= submit_tag "Update", class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% end %>

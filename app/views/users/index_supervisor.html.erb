@@ -1,0 +1,26 @@
+<div class="jumbotron">
+  <h1 class="text-center">Supervisors</h1>
+  <hr class="my-4">
+  <%= link_to "Add New Supervisor", new_user_path, class: "btn btn-primary" %>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col" class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @supervisors.each do |supervisor| %>
+      <tr>
+        <th scope="row"><%= supervisor.id %></th>
+        <td><%= link_to supervisor.full_name, user_path(supervisor) %></td>
+        <td><%= link_to supervisor.email, '#' %></td>
+        <td><%#= link_to "Edit", edit_user_path(user.id), class: "btn btn-sm btn-primary" %></td>
+        <td><%#= link_to "Delete", user_path(user.id), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
