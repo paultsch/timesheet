@@ -1,0 +1,31 @@
+<%= render 'users/student_header' %>
+
+<% if @sheets.count > 0 %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Date</th>
+        <th scope="col">Template</th>
+        <th scope="col">Signed In?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sheets.each do |sheet| %>
+        <tr>
+          <th scope="row"><%= sheet.id %></th>
+          <td><%= sheet.date %></td>
+          <td><%= sheet.template.template_name %></td>
+          <% if sheet.signed_in == nil || sheet.signed_in == false%>
+            <td class="archived">
+              <%= fa_icon 'times-circle 2x' %>
+            </td>
+          <% else %>
+            <td>
+              <%= fa_icon 'check 2x' %>
+            </td>
+          <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

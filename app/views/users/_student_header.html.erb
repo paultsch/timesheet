@@ -1,0 +1,8 @@
+<div class="jumbotron">
+  <h1 class="text-center"><%= @user.full_name %></h1>
+  <h4 class="text-center"><%= @user.usertype.user_type %> </h4>
+  <hr class="my-4">
+  <%= link_to "View Current Year ", user_path(@user), class: "btn btn-primary" %>
+  <%= link_to "Edit User", edit_user_path(@user), class: "btn btn-primary" %>
+  <%= link_to "Archived Calendars", archived_users_path(@user), class: "btn btn-primary" %>
+</div>

@@ -3,3 +3,19 @@
 .jumbotron {
   margin: 10px;
 }
+
+.fa-check {
+  color: green;
+}
+
+.archived .fa-times-circle {
+  color: red;
+}
+
+.fa-times-circle:hover {
+    color: red;
+}
+
+.delete-date {
+  float: right;
+}

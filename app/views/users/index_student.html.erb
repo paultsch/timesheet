@@ -2,6 +2,11 @@
   <h1 class="text-center">Students</h1>
   <hr class="my-4">
   <%= link_to "Add New Student", new_user_path, class: "btn btn-primary" %>
+  <h3>Import Users</h3>
+  <%= form_tag import_users_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Upload Students" %>
+  <% end %>
 </div>
 <table class="table table-striped">
   <thead>
@@ -11,6 +16,7 @@
       <th scope="col">Grade</th>
       <th scope="col">Email</th>
       <th scope="col">Supervisor</th>
+      <th scope="col">Template Type</th>
       <th scope="col" class="text-center">Actions</th>
     </tr>
   </thead>
@@ -22,6 +28,7 @@
         <td><%= student.grade.grade_level %></td>
         <td><%= student.email %></td>
         <td><%= link_to student.supervisor.full_name, user_path(student.supervisor.id) unless student.supervisor == nil %></td>
+        <td><%= link_to student.template.template_name, template_path(student.template.id) unless student.template == nil %> </td>
         <td><%= link_to "Edit", edit_user_path(student.id), class: "btn btn-sm btn-primary" %></td>
         <td><%= link_to "Delete", user_path(student.id), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure you want to delete this student? This will delete the student and all of her timesheets?'}%></td>
       </tr>

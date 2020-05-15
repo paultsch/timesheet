@@ -36,9 +36,12 @@ before_action :set_template, only: [:edit, :update, :destroy, :show]
 
   def add_schedule_date
     @schedule = Schedule.new(schedule_params)
-    @schedule.template_id = params[:id]
-    @schedule.date = params[:date]
+    @template = params[:id]
+    @date = params[:date]
+    @schedule.template_id = @template
+    @schedule.date = @date
     if @schedule.save
+      add_date_to_sheets(@template, @date)
       flash[:notice] = "That date has been added."
       redirect_back(fallback_location: root_path)
     else
@@ -47,15 +50,30 @@ before_action :set_template, only: [:edit, :update, :destroy, :show]
     end
   end
 
+  def add_date_to_sheets(template, date)
+    @users = User.where(template_id: template)
+    @users.each do |user|
+      Sheet.create(user_id: user.id, template_id: template, date: date)
+    end
+  end
+
   def delete_schedule_date
-    @schedule = Schedule.where(template_id: params[:id], date: params[:date])
+    @template = params[:id]
+    @date = params[:date]
+    @schedule = Schedule.where(template_id: @template, date: @date)
     if @schedule.destroy_all
+      delete_date_from_sheets(@template, @date)
       flash[:notice] = "That date has been deleted."
       redirect_back(fallback_location: root_path)
     else
       flash[:alert] = "These was an issue deleting that date."
       redirect_back(fallback_location: root_path)
     end
+  end
+
+  def delete_date_from_sheets(template, date)
+    @sheets = Sheet.where(template_id: template, date: params[:date])
+    @sheets.delete_all
   end
 
   def index
@@ -76,6 +94,10 @@ private
 
   def schedule_params
     params.permit(:template_id, :date)
+  end
+
+  def sheet_params
+    params.permit(:user_id, :template_id, :date, :signed_in)
   end
 
   def set_template

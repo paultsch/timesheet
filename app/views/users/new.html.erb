@@ -1,55 +1,77 @@
-<h1>Users#new</h1>
+<div class="jumbotron">
+  <h1 class="text-center">Create New User</h1>
+</div>
 
 <%= form_for @user do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+
+<div class="row">
+  <div class="col-6">
+    <div class="form-group">
+      <%= f.label :first_name %>
+      <%= f.text_field :first_name, autocomplete: "first_name", class: "form-control" %>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="form-group">
+      <%= f.label :last_name %>
+      <%= f.text_field :last_name, autocomplete: "last_name", class: "form-control" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :email %>
+  <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control col-6" %>
+</div>
+
+<div class="row">
+  <div class="col-6">
+    <div class="form-group">
+      <%= f.label :password %>
+      <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <% end %>
+      <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
+  <div class="col-6">
+    <div class="form-group">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label "User Type" %><br />
+  <%= collection_select(:user, :usertype_id, Usertype.all, :id, :user_type,  {include_blank: true}, { class: "form-control col-6" }) %>
+</div>
+
+<div id="student-options">
+
+  <div class="form-group">
+    <%= f.label "Grade" %>
+    <%= collection_select(:user, :grade_id, Grade.all, :id, :grade_level, {include_blank: true}, { class: "form-control col-6" }) %>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  <div class="row">
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.label "Supervisor" %>
+        <%= collection_select(:user, :supervisor_id, User.where(usertype_id: 2), :id, :full_name, {include_blank: true}, { class: "form-control" })  %>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.label "Template" %>
+        <%= collection_select(:user, :template_id, @templates, :id, :template_name, {include_blank: true}, { class: "form-control" }) %>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :first_name %><br />
-    <%= f.text_field :first_name, autocomplete: "first_name" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :last_name %><br />
-    <%= f.text_field :last_name, autocomplete: "last_name" %>
-  </div>
-
-  <div class="field">
-    <%= f.label "User Type" %><br />
-    <%= collection_select(:user, :usertype_id, Usertype.all, :id, :user_type) %>
-  </div>
-
-  <div class="field">
-    <%= f.label "Supervisor" %><br />
-    <%= collection_select(:user, :supervisor_id, User.where(usertype_id: 2), :id, :full_name, include_blank: true) %>
-  </div>
-
-  <div class="field">
-    <%= f.label "Grade" %><br />
-    <%= collection_select(:user, :grade_id, Grade.all, :id, :grade_level, include_blank: true) %>
-  </div>
-
-  <div class="field">
-    <%= f.label "Template" %>
-    <%= collection_select(:user, :template_id, @templates, :id, :template_name, include_blank: true) %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
+<div class="actions">
+  <%= f.submit "Create", class: "btn btn-success" %>
+</div>
 <% end %>

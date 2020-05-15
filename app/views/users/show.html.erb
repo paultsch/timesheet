@@ -1,9 +1,5 @@
-<div class="jumbotron">
-  <h1 class="text-center"><%= @user.full_name %></h1>
-  <h4 class="text-center"><%= @user.usertype.user_type %> </h4>
-  <hr class="my-4">
-  <%= link_to "Edit User", edit_user_path(@user), class: "btn btn-primary" %>
-</div>
+<%= render 'users/student_header' %>
+
 
 <% if @students.count > 0 %>
 <table class="table table-striped">
@@ -37,15 +33,28 @@
     <% @sheets.each do |sheet| %>
       <% if sheet.date == date %>
         <% if sheet.signed_in == true %>
+          <span class="delete-date">
+            <%= link_to ('<i class="fa fa-times-circle"></i>').html_safe, destroy_sheet_sheets_path(@user.id, date), method: :delete, data: {confirm: 'You are about to delete a date for a student. Are you sure you want to do that?'}%>
+          </span>
           <div class="text-center">
             <%= link_to "Done", unsign_in_student_sheets_path(@user.id, date: date), class: "btn btn-success btn-sm", method: :put, data: {confirm: 'You are about to unsign in. Are you sure you want to do that?'} %>
           </div>
         <% else %>
+          <span class="delete-date">
+            <span class="delete-date">
+              <%= link_to ('<i class="fa fa-times-circle"></i>').html_safe, destroy_sheet_sheets_path(@user.id, date), method: :delete, data: {confirm: 'You are about to delete a date for a student. Are you sure you want to do that?'}%>
+            </span>
+          </span>
           <div class="text-center">
             <%= link_to "Sign In",  sign_in_student_sheets_path(@user.id, date: date), class: "btn btn-danger btn-sm", method: :put %>
           </div>
         <% end %>
       <% end %>
+    <% end %>
+    <% if @sheet_dates.exclude?(date) %>
+      <span class="delete-date">
+        <%= link_to ('<i class="fa fa-plus-circle"></i>').html_safe, create_sheet_sheets_path(@user.id, @user.template_id, date), method: :post %>
+      </span>
     <% end %>
   <% end %>
 <% end %>

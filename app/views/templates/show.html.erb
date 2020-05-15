@@ -11,7 +11,7 @@
   <%= date.day %>
   <% if @schedule_dates.include?(date) %>
     <div class="text-center">
-      <%= link_to "Delete",  delete_schedule_date_templates_path(params[:id], date: date), class: "btn btn-sm btn-danger", method: :delete %>
+      <%= link_to "Delete",  delete_schedule_date_templates_path(params[:id], date: date), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'You are about to delete a template date.  If any student that has this template has signed in on this date, that sign in record will be delete. This process cannot be undone. Are you sure you want to do that?'} %>
     </div>
   <% else %>
     <div class="text-center">

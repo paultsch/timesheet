@@ -23,6 +23,19 @@ class SheetsController < ApplicationController
     end
   end
 
+  def destroy_sheet
+    @sheet = Sheet.where(user_id: params[:id], date: params[:date])
+    @sheet.delete_all
+    flash[:notice] = "Date has been deleted."
+    redirect_back(fallback_location: root_path)
+  end
+
+  def create_sheet
+    Sheet.create(user_id: params[:id], template_id: params[:template_id], date: params[:date], signed_in: false)
+    flash[:notice] = "Date has been created."
+    redirect_back(fallback_location: root_path)
+  end
+
 private
 
 def sheet_params

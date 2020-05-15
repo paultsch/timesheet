@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     collection do
       put :sign_in_student, path: "sign_in_student/:id/:date"
       put :unsign_in_student, path: "unsign_in_student/:id/:date"
+      delete :destroy_sheet, path: "destroy_sheet/:id/:date"
+      post :create_sheet, path: "create_sheet/:id/:template_id/:date"
     end
   end
   resources :usertypes, except: [:show]
@@ -22,6 +24,8 @@ Rails.application.routes.draw do
   resources :users, except: [:show] do
     collection do
       put :update_multiple
+      get :archived, path: ":id/archived"
+      post :import
     end
   end
   resources :templatetypes, except: [:show, :index]
