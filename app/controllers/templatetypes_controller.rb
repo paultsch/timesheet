@@ -1,5 +1,7 @@
 class TemplatetypesController < ApplicationController
 before_action :set_templatetype, only: [:edit, :update, :destroy]
+before_action :require_admin
+
 
   def new
     @templatetype = Templatetype.new
@@ -32,7 +34,18 @@ before_action :set_templatetype, only: [:edit, :update, :destroy]
     end
   end
 
-  def destory
+  def destroy
+    templatetype_to_delete = params[:id]
+    templatetype = Templatetype.find(templatetype_to_delete)
+    templates = Template.where(templatetype_id: templatetype.id)
+    schedules = Schedule.where(template_id: templates)
+    sheets = Sheet.where(template_id: templates)
+    sheets.delete_all
+    schedules.delete_all
+    templates.delete_all
+    templatetype.delete
+    flash[:alert] = "Year was successfully deleted year and all its children."
+    redirect_to templates_path
   end
 
 private

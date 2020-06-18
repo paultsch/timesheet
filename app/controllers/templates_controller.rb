@@ -1,5 +1,6 @@
 class TemplatesController < ApplicationController
 before_action :set_template, only: [:edit, :update, :destroy, :show]
+before_action :require_admin
 
   def new
     @template = Template.new
@@ -83,7 +84,15 @@ before_action :set_template, only: [:edit, :update, :destroy, :show]
   end
 
   def destroy
-
+    template_to_delete = params[:id]
+    templates = Template.find(template_to_delete)
+    schedules = Schedule.where(template_id: templates)
+    sheets = Sheet.where(template_id: templates)
+    sheets.delete_all
+    schedules.delete_all
+    templates.delete
+    flash[:alert] = "Template was successfully deleted and all its children."
+    redirect_to templates_path
   end
 
 private

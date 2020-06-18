@@ -10,7 +10,9 @@
   </head>
 
   <body>
-    <%= render 'layouts/navigation' %>
+    <% if user_signed_in? %>
+      <%= render 'layouts/navigation' %>
+    <% end %>
     <div class="container">
       <%= render 'layouts/messages' %>
       <%= yield %>

@@ -1,8 +1,31 @@
 <div class="jumbotron">
-  <h1 class="text-center"><%= @user.full_name %></h1>
+  <h1 class="text-center"><%= @user.full_name.titlecase %></h1>
   <h4 class="text-center"><%= @user.usertype.user_type %> </h4>
-  <hr class="my-4">
-  <%= link_to "View Current Year ", user_path(@user), class: "btn btn-primary" %>
-  <%= link_to "Edit User", edit_user_path(@user), class: "btn btn-primary" %>
-  <%= link_to "Archived Calendars", archived_users_path(@user), class: "btn btn-primary" %>
+  <% if user_is_student? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center">Days</th>
+          <th scope="col" class="text-center">Worked</th>
+          <th scope="col" class="text-center">Missed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th class="text-center"><%= @total_sign_ins %></th>
+          <td class="text-center"><%= @total_worked %></td>
+          <td class="text-center"><%= @total_missed %></td>
+        </tr>
+      </tbody>
+    </table>
+  <% end %>
+  <% if logged_in_user_admin? %>
+    <hr class="my-4">
+      <% if user_is_student? %>
+        <%= link_to "View Current Year ", user_path(@user), class: "btn btn-primary" %>
+        <%= link_to "Edit User", edit_user_path(@user), class: "btn btn-primary" %>
+        <%= link_to "Archived Calendars", archived_users_path(@user), class: "btn btn-primary" %>
+      <% end %>
+      <%= link_to "Delete User", user_path(@user), class: "btn btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
+  <% end %>
 </div>

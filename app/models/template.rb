@@ -9,4 +9,6 @@ class Template < ApplicationRecord
     "#{year.year}: #{templatetype.template_type}"
   end
 
+  validates_uniqueness_of :templatetype, scope: %i[year]
+
 end

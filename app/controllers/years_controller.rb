@@ -1,5 +1,7 @@
 class YearsController < ApplicationController
 before_action :set_year, only: [:edit, :update, :destroy]
+before_action :require_admin
+
 
   def new
     @year = Year.new
@@ -30,6 +32,17 @@ before_action :set_year, only: [:edit, :update, :destroy]
   end
 
   def destroy
+      year_to_delete = params[:id]
+      year = Year.find(year_to_delete)
+      templates = Template.where(year_id: year.id)
+      schedules = Schedule.where(template_id: templates)
+      sheets = Sheet.where(template_id: templates)
+      sheets.delete_all
+      schedules.delete_all
+      templates.delete_all
+      year.delete
+      flash[:alert] = "Year was successfully deleted year and all its children."
+      redirect_to templates_path
   end
 
 private

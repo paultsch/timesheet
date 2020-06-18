@@ -1,0 +1,33 @@
+<div class="jumbotron">
+  <h1 class="text-center">Students</h1>
+  <hr class="my-4">
+  <%= link_to "Add New Student", new_user_path, class: "btn btn-primary" %>
+  <%= link_to "Grid Edit", edit_multiple_users_path, class: "btn btn-primary" %>
+</div>
+<%= form_tag update_multiple_users_path, method: :put do %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Supervisor</th>
+        <th scope="col">Template</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+        <%= fields_for "students[]", student do |f| %>
+          <tr>
+            <td><%= link_to student.full_name, user_path(student) %></td>
+            <td><%= student.grade.grade_level unless student.grade_id == nil %></td>
+            <td><%= f.collection_select(:supervisor_id, User.where(usertype_id: 2), :id, :full_name, {include_blank: true}, { class: "form-control" })  %></td>
+            <td><%= f.collection_select(:template_id, @templates, :id, :template_name, {include_blank: true}, { class: "form-control" }) %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="form-group">
+    <%= submit_tag "Update", class: 'btn btn-primary' %>
+  </div>
+<% end %>

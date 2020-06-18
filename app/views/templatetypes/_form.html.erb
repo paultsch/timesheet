@@ -1,7 +1,7 @@
 <%= form_for @templatetype do |f| %>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :template_type %>
-    <%= f.text_field :template_type %>
+    <%= f.text_field :template_type, class: "form-control" %>
   </div>
 
   <div class="actions">

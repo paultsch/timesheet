@@ -1,5 +1,7 @@
 class UsertypesController < ApplicationController
 before_action :set_usertype, only: [:edit, :update, :destroy]
+before_action :require_admin
+
 
   def new
     @usertype = Usertype.new

@@ -1,5 +1,6 @@
 class GradesController < ApplicationController
 before_action :set_grade, only: [:edit, :update, :destroy]
+before_action :require_admin
 
   def new
     @grade = Grade.new
@@ -43,7 +44,7 @@ before_action :set_grade, only: [:edit, :update, :destroy]
 private
 
 def grade_params
-  params.require(:grade).permit(:grade_level)
+  params.require(:grade).permit(:grade_level, :next_grade_id)
 end
 
 def set_grade

@@ -1,2 +1,20 @@
-<h1>Dashboards#admin</h1>
-<p>Find me in app/views/dashboards/admin.html.erb</p>
+<div class="row">
+  <div class="col-12">
+    <div class="jumbotron">
+      <h1 class="text-center">Dashboard</h1>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-9">
+    <%= render 'users/students_partial' %>
+  </div>
+  <div class="col-3">
+    <h1 class="text-center">Menu</h1>
+    <div>
+      <%= link_to "Add User", new_user_path, class: "btn btn-primary btn-block" %>
+    </div
+  </div>
+  <div>
+
+</div>

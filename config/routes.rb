@@ -26,6 +26,10 @@ Rails.application.routes.draw do
       put :update_multiple
       get :archived, path: ":id/archived"
       post :import
+      get :edit_multiple, path: "edit-multiple"
+      get :search, path: "search-users"
+      get :progress_grades, path: "progress-grades"
+      get :bulk_delete_students, path: "bulk-delete-students"
     end
   end
   resources :templatetypes, except: [:show, :index]
@@ -37,9 +41,9 @@ Rails.application.routes.draw do
   end
 
   resources :years, except: [:show, :index]
-  get 'users/students', to: 'users#index_student'
+  root to: 'users#index_student'
   get 'users/supervisors', to: 'users#index_supervisor'
   get 'users/:id', to: 'users#show'
-  root to: 'dashboards#admin'
+  #root to: 'dashboards#admin'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

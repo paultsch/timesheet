@@ -6,23 +6,20 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <%= link_to "Dashboard", root_path, class:"nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "Students", users_students_path, class:"nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "Supervisors", users_supervisors_path, class:"nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "Add User", new_user_path, class:"nav-link" %>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-auto">
-        <%# if user_signed_in? %>
+        <% if !logged_in_user_admin? %>
+          <li class="nav-item active">
+            <%= link_to "Dashboard", root_path, class:"nav-link" %>
+          </li>
+        <% end %>
+        <% if logged_in_user_admin? %>
+          <li class="nav-item">
+            <a href="/" class="nav-link <%= 'active' if current_page?(root_path) %>">Students</a>
+          </li>
+          <li class="nav-item">
+            <a href="/users/supervisors" class="nav-link <%= 'active' if current_page?(users_supervisors_path) %>">Supervisors</a>
+          </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle <%= 'active' if current_page?(templates_path) || current_page?(grades_path) || current_page?(usertypes_path)%>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Schedule
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -32,21 +29,26 @@
               <%= link_to "User Types", usertypes_path, class: "dropdown-item" %>
             </div>
           </li>
-          <% if user_signed_in? %>
-            <li class="nav-item">
-              <%= link_to "Logout", destroy_user_session_path, class: "btn btn-danger", method: :delete %>
-            </li>
-          <% else %>
-            <li class="nav-item">
-              <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
-            </li>
-          <% end %>
-        <%# end %>
+        <% end %>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
+      <ul class="navbar-nav ml-auto">
+        <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "Logout", destroy_user_session_path, class: "btn btn-danger", method: :delete %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary" %>
+          </li>
+        <% end %>
+      </ul>
+      <% if logged_in_user_admin? %>
+        <%= form_tag search_users_path, method: :get, class:"form-inline my-2 my-lg-0"  do %>
+          <%= text_field_tag :user, params[:user], placeholder: "Search Users", autofocus: true, class: "form-control mr-sm-2" %>
+          <%= button_tag "Search", type: :submit, class: "btn btn-outline-success my-2 my-sm-0" %>
+        <% end %>
+      <% end %>
+
     </div>
   </div>
 </nav>

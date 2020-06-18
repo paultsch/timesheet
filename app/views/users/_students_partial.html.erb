@@ -1,0 +1,31 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Grade</th>
+      <% if current_page?(root_path) %>
+        <th scope="col">Supervisor</th>
+      <% else %>
+        <th scope="col">Email</th>
+      <% end %>
+      <th scope="col">Missed Days</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @students.each do |student| %>
+      <tr>
+        <th scope="row"><%= student.id %></th>
+        <td><%= link_to student.full_name, user_path(student), method: :get %></td>
+        <td><%= student.grade.grade_level %></td>
+        <% if current_page?(root_path) %>
+          <td><%= student.supervisor.full_name %></td>
+        <% else %>
+          <td><%= student.email %></td>
+        <% end %>
+        <td><%= student.count_missing_dates %></td>
+        <td><%#= link_to "Delete", user_path(user.id), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'}%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

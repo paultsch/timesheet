@@ -20,7 +20,7 @@
           <tr>
             <th scope="row"><%= templatetype.id %></th>
             <td><%= link_to templatetype.template_type, edit_templatetype_path(templatetype)  %></td>
-            <td><%= link_to "Delete", '#', class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            <td><%= link_to "Delete", templatetype_path(templatetype), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
           </tr>
         <% end %>
       </tbody>
@@ -45,7 +45,7 @@
             <th scope="row"><%= year.id %></th>
             <td><%= link_to year.year, edit_year_path(year)  %></td>
             <td><%= year.current_year  %></td>
-            <td><%= link_to "Delete", '#', class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            <td><%= link_to "Delete", year_path(year), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
           </tr>
         <% end %>
       </tbody>
@@ -69,11 +69,9 @@
         <% @templates.each do |template| %>
           <tr>
             <th scope="row"><%= template.id %></th>
-            <td><%= link_to template.template_name, template_path(template)  %></td>
-            <td><%= link_to "Edit", edit_template_path(template), class: "btn btn-sm btn-primary" %></td>
-            <td><%= link_to "Add Dates", '#', class: "btn btn-sm btn-success" %></td>
-            <td><%= link_to "Delete Dates", '#', class: "btn btn-sm btn-danger" %></td>
-            <td><%= link_to "Delete", '#', class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
+            <td><%= link_to template.template_name, edit_template_path(template)  %></td>
+            <td><%= link_to "Build Calendar", template_path(template), class: "btn btn-sm btn-primary" %></td>
+            <td><%= link_to "Delete", template_path(template), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %></td>
           </tr>
         <% end %>
       </tbody>

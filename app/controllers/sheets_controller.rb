@@ -1,4 +1,7 @@
 class SheetsController < ApplicationController
+before_action :require_admin, except: [:sign_in_student, :unsign_in_student]
+
+
   def sign_in_student
     @sheet = Sheet.where(user_id: params[:id], date: params[:date]).first
     @sheet.signed_in = true

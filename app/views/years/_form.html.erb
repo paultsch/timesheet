@@ -1,12 +1,14 @@
-<%= form_for @year do |f| %>
-  <div class="field">
-    <%= f.label :year %>
-    <%= f.text_field :year %>
-  </div>
+<%= form_with model:@year do |f| %>
 
-  <div class="field">
-    <%= f.label :current_year %>
-    <%= f.check_box :current_year %>
+  <div class="form-group row">
+    <%= f.label :year, class: "col-1 col-form-label"%>
+    <div class="col-6">
+      <%= f.text_field :year, class: "form-control" %>
+    </div>
+      <span class="form-check align-middle">
+        <%= f.check_box :current_year, class: "form-check-input" %>
+        <label class="form-check-label">Active?</label>
+      </span>
   </div>
 
   <div class="actions">

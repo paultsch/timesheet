@@ -1,13 +1,17 @@
 <%= form_for @template do |f| %>
-  <div class="field">
-    <%= f.label :templatetype_id %>
-    <%= collection_select(:template, :templatetype_id, Templatetype.all, :id, :template_type) %>
-  </div>
-
-  <div class="field">
-    <%= f.label :year_id %>
-    <%= collection_select(:template, :year_id, Year.all, :id, :year) %>
-
+  <div class="row">
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.label :year_id %>
+        <%= collection_select(:template, :year_id, Year.all, :id, :year, {include_blank: true}, { class: "form-control" }) %>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="form-group">
+        <%= f.label :templatetype_id %>
+        <%= collection_select(:template, :templatetype_id, Templatetype.all, :id, :template_type, {include_blank: true}, { class: "form-control" }) %>
+      </div>
+    </div>
   </div>
 
   <div class="actions">

@@ -1,12 +1,18 @@
 class UsersController < ApplicationController
-before_action :set_user, only: [:edit, :update, :show, :destroy, :archived]
-before_action :set_active_templates, only: [:new, :edit, :show]
+before_action :set_user, only: [:edit, :update, :show, :destroy, :archived, :require_same_user]
+before_action :set_active_templates, only: [:new, :edit, :show, :edit_multiple]
+before_action :require_admin, except: [:index_student, :show]
+before_action :require_same_user, only: [:show]
+
+
   def new
     @user = User.new
   end
 
   def create
     @user = User.new(user_params)
+    @user.first_name = @user.first_name.titlecase
+    @user.last_name = @user.last_name.titlecase
     if @user.save
       if @user.template_id != nil
         create_schedules_in_sheets(@user.id, @user.template_id)
@@ -21,6 +27,11 @@ before_action :set_active_templates, only: [:new, :edit, :show]
 
   def edit
 
+  end
+
+  def advance_grades
+    ninth_graders = User.find_by_sql"Update * FROM users INNER JOIN grades ON grades.id = users.grade_id WHERE grades.grade_level = 9"
+    ninth_graders.update()
   end
 
   def update
@@ -66,14 +77,12 @@ before_action :set_active_templates, only: [:new, :edit, :show]
     end
   end
 
-  def non_active_years
-    user = params[:id]
-    inactive_templates_initial_pull = Template.joins(:year).merge(Year.where(:current_year => false))
-    inactive_templates = inactive_templates_initial_pull.distinct.pluck(:template_id)
-    @sheets = Sheet.where(user_id: user, template_id: inactive_templates)
-  end
-
   def index_student
+    if !logged_in_user_admin?
+      redirect_to user_path(current_user)
+    end
+
+
     @students = User.joins(:usertype).merge(Usertype.where(:user_type => 'student'))
 
     respond_to do |format|
@@ -87,22 +96,61 @@ before_action :set_active_templates, only: [:new, :edit, :show]
   end
 
   def show
+    if user_is_supervisor?
+      find_active_sheets_for_multiple_students
+    end
+
+    if user_is_student?
+      find_active_sheets
+    end
+  end
+
+  def find_active_sheets_for_multiple_students
     @students = User.where(supervisor_id: params[:id])
+  end
+
+  def find_active_sheets
     active_sheets = Sheet.where(template_id: @templates)
-    #@sheets = student_sheet.templates.includes(:years).where('years.current_year = ?', true)
-    #Sheet.includes(:users, :templates).where('users.id = ? AND templates.year.current_year = ?', params[:id], true)
-    #@sheets = student_sheet.where('template.year.current_year = ?', params[:id], true)
     @sheets = active_sheets.where(user_id: params[:id])
     @sheet_dates = @sheets.distinct.pluck(:date)
+    sign_ins = @sheets.where("date <= ?", Date.yesterday())
+    @total_sign_ins = sign_ins.count
+    @total_worked = sign_ins.where(signed_in: true).count
+    @total_missed = sign_ins.where(signed_in: false).count
+  end
+
+  def search
+    user = params[:user]
+    @searched_user = User.full_search(user)
+    if @searched_user.count == 1
+      redirect_to user_path(@searched_user.first)
+    elsif @searched_user.count > 1
+      flash[:notice] = "There was more that one search result. If this isn't the right person, do a more detailed search."
+      redirect_to user_path(@searched_user.first)
+    else
+      flash[:alert] = "No one matched that search result."
+      redirect_to root_path
+    end
+  end
+
+  def edit_multiple
+    @students = User.where(usertype_id: 1)
   end
 
   def update_multiple
-    Sheet.update(params[:dates].keys, params[:dates].values)
-    flash[:notice] = "The timesheet has been updated."
-    redirect_to user_path(params[:id])
+    User.update(params[:students].keys, params[:students].values)
+    # need to figure how to run this action for template_ids that have been updated: create_schedules_in_sheets(student.id, student.template_id)
+    flash[:notice] = "Students has been updated."
+    redirect_to root_path
   end
 
   def destroy
+    if user_is_student?
+      Sheet.where(user_id: @user).delete_all
+    end
+    if user_is_supervisor?
+      User.where(supervisor_id: @user).update(supervisor_id: nil)
+    end
     @user.destroy
     flash[:notice] = "#{@user.full_name} has been deleted."
     redirect_to root_path
@@ -111,11 +159,31 @@ before_action :set_active_templates, only: [:new, :edit, :show]
   def import
     User.import(params[:file])
     flash[:notice] = "Users have been imported."
-    redirect_to users_students_path
+    redirect_to root_path
   end
 
   def archived
     @sheets = Sheet.where(user_id: params[:id]).order(:date)
+  end
+
+  def progress_grades
+    grades = Grade.all.order(grade_level: :desc)
+    grades.each do |grade|
+    	current_grade = grade.id
+    	next_grade = grade.next_grade_id
+    	User.where(grade_id: current_grade).update(grade_id: next_grade)
+    end
+    flash[:notice] = "All student grades have been advanced to their next grade"
+    redirect_to root_path
+  end
+
+  def bulk_delete_students
+    grade = Grade.where(next_grade_id: nil)
+    users_to_delete = User.where(grade_id: grade)
+    Sheet.where(user_id: users_to_delete).delete_all
+    users_to_delete.destroy_all
+    flash[:notice] = "All students with a next grade set to 'blank' has been deleted"
+    redirect_to root_path
   end
 
 private
@@ -132,12 +200,21 @@ private
     @user = User.find(params[:id])
   end
 
-  def set_active_sheet
-
-  end
-
   def set_active_templates
     @templates = Template.joins(:year).merge(Year.where(:current_year => true))
+  end
+
+  def require_same_user
+    # students = User.where(supervisor_id: params[:id])
+    # student_ids = students.distinct.pluck(:id)
+    if logged_in_user_student? && current_user.id != @user.id
+      flash[:alert] = "You don't have access to other's page."
+      redirect_to root_path
+    end
+    # if (logged_in_user_supervisor? && current_user.id != @user.id) || (logged_in_user_supervisor? && student_ids.include?(@user.id))
+    #   flash[:alert] = "You don't have access that page."
+    #   redirect_to root_path
+    # end
   end
 
 end

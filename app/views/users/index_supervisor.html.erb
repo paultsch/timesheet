@@ -9,7 +9,7 @@
       <th scope="col">ID</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
-      <th scope="col" class="text-center">Actions</th>
+      <th scope="col" class="text-center">Number of Students</th>
     </tr>
   </thead>
   <tbody>
@@ -17,9 +17,8 @@
       <tr>
         <th scope="row"><%= supervisor.id %></th>
         <td><%= link_to supervisor.full_name, user_path(supervisor) %></td>
-        <td><%= link_to supervisor.email, '#' %></td>
-        <td><%#= link_to "Edit", edit_user_path(user.id), class: "btn btn-sm btn-primary" %></td>
-        <td><%#= link_to "Delete", user_path(user.id), class: "btn btn-sm btn-danger", method: :delete, data: {confirm: 'Are you sure?'}%></td>
+        <td><%= link_to supervisor.email, "mailto:#{supervisor.email}" %></td>
+        <td class="text-center"><%= supervisor.count_students %> </td>
       </tr>
     <% end %>
   </tbody>
