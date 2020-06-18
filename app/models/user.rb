@@ -32,7 +32,7 @@ after_update :create_schedules_in_sheets
   end
 
   def self.full_search(search)
-    find_by_sql "SELECT u.id, u.first_name || ' ' || u.last_name as fullname FROM users u WHERE fullname LIKE '%#{search}%'"
+    find_by_sql "SELECT u.id, u.first_name || ' ' || u.last_name as 'fullname' FROM users u WHERE 'fullname' LIKE '%#{search}%'"
   end
 
   def self.import(file)
