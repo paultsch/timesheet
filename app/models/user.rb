@@ -38,14 +38,14 @@ after_update :create_schedules_in_sheets
   #
   def self.full_search(param)
     param.strip!
-    to_send_back = (first_name_search(param) + last_name_search(param) + full_name_search(param)).uniq
+    to_send_back = (full_name_search(param)).uniq
     return nil unless to_send_back
     to_send_back
   end
 
   def self.full_name_search(search)
     @names = search.split(" ")
-    where("first_name LIKE ? AND last_name LIKE ?", "%#{@names[0]}","%#{@names[1]}" )
+    where("first_name LIKE ? AND last_name LIKE ?", "%#{@names[0]}%","%#{@names[1]}%" )
   end
 
   def self.import(file)
