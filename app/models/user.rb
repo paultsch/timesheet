@@ -23,16 +23,29 @@ after_update :create_schedules_in_sheets
     "#{first_name} #{last_name }"
   end
 
-  def self.first_search(search)
-    where("first_name LIKE ?", "%#{search}%")
+
+  def self.first_name_search(param)
+    search_for('first_name', param)
   end
 
-  def self.last_search(search)
-    where("last_name LIKE ?", "%#{search}%")
+  def self.last_name_search(param)
+    search_for('last_name', param)
   end
 
-  def self.full_search(search)
-    find_by_sql "SELECT u.id, u.first_name || ' ' || u.last_name as 'fullname' FROM users u WHERE 'fullname' LIKE '%#{search}%'"
+  def self.search_for(field_name, param)
+    where("#{field_name} like ?", "%#{param}%")
+  end
+  #
+  def self.full_search(param)
+    param.strip!
+    to_send_back = (first_name_search(param) + last_name_search(param) + full_name_search(param)).uniq
+    return nil unless to_send_back
+    to_send_back
+  end
+
+  def self.full_name_search(search)
+    @names = search.split(" ")
+    where("first_name LIKE ? AND last_name LIKE ?", "%#{@names[0]}","%#{@names[1]}" )
   end
 
   def self.import(file)
