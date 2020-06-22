@@ -23,9 +23,9 @@
     <hr class="my-4">
       <% if user_is_student? %>
         <%= link_to "View Current Year ", user_path(@user), class: "btn btn-primary" %>
-        <%= link_to "Edit User", edit_user_path(@user), class: "btn btn-primary" %>
         <%= link_to "Archived Calendars", archived_users_path(@user), class: "btn btn-primary" %>
       <% end %>
+      <%= link_to "Edit User", edit_user_path(@user), class: "btn btn-primary" %>
       <%= link_to "Delete User", user_path(@user), class: "btn btn-danger", method: :delete, data: {confirm: 'Are you sure?'} %>
   <% end %>
 </div>
