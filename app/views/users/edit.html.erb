@@ -54,7 +54,7 @@
       <div class="col-6">
         <div class="form-group">
           <%= f.label "Supervisor" %>
-          <%= collection_select(:user, :supervisor_id, User.where(usertype_id: 2), :id, :full_name, {include_blank: true}, { class: "form-control" })  %>
+          <%= collection_select(:user, :supervisor_id, User.where.not(usertype_id: 1), :id, :full_name, {include_blank: true}, { class: "form-control" })  %>
         </div>
       </div>
       <div class="col-6">

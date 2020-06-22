@@ -9,6 +9,7 @@
       <th scope="col">ID</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
+      <th scope="col">Type</th>
       <th scope="col" class="text-center">Number of Students</th>
     </tr>
   </thead>
@@ -18,6 +19,7 @@
         <th scope="row"><%= supervisor.id %></th>
         <td><%= link_to supervisor.full_name, user_path(supervisor) %></td>
         <td><%= link_to supervisor.email, "mailto:#{supervisor.email}" %></td>
+        <td><%= supervisor.usertype.user_type %>
         <td class="text-center"><%= supervisor.count_students %> </td>
       </tr>
     <% end %>

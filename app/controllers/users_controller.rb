@@ -92,11 +92,11 @@ before_action :require_same_user, only: [:show]
   end
 
   def index_supervisor
-    @supervisors = User.joins(:usertype).merge(Usertype.where(:user_type => 'supervisor'))
+    @supervisors = User.joins(:usertype).merge(Usertype.where.not(:user_type => 'student'))
   end
 
   def show
-    if user_is_supervisor?
+    if !user_is_student?
       find_active_sheets_for_multiple_students
     end
 

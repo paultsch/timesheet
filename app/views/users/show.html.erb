@@ -1,7 +1,7 @@
 <%= render 'users/student_header' %>
 
 
-<% if user_is_supervisor? %>
+<% if !user_is_student? %>
   <%= render 'users/students_partial' %>
 <% end %>
 
