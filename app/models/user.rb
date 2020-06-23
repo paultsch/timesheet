@@ -37,10 +37,11 @@ after_update :create_schedules_in_sheets
   end
   #
   def self.full_search(param)
-    param.strip!
-    to_send_back = (full_name_search(param)).uniq
-    return nil unless to_send_back
-    to_send_back
+    find_by_sql "SELECT u.id, CONCAT(u.first_name, ' ', u.last_name) AS fullname FROM users u WHERE fullname LIKE '%#{param}%'"
+    # param.strip!
+    # to_send_back = (full_name_search(param)).uniq
+    # return nil unless to_send_back
+    # to_send_back
   end
 
   def self.full_name_search(search)
