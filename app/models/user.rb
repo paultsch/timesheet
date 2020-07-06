@@ -59,7 +59,7 @@ after_update :create_schedules_in_sheets
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
       user_hash = row.to_hash
-      user = find_or_create_by!(email: user_hash['email'], first_name: user_hash['first_name'], last_name: user_hash['last_name'], :encrypted_password => user_hash['password'], usertype_id: 1, grade_id: 3)
+      user = find_or_create_by!(email: user_hash['email'], first_name: user_hash['first_name'], last_name: user_hash['last_name'], :encrypted_password => user_hash['password'], usertype_id: 1, grade_id: 1)
       user.update_attributes(user_hash)
     end
   end
