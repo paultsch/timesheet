@@ -87,7 +87,7 @@ before_action :require_same_user, only: [:show]
 
     respond_to do |format|
       format.html
-      format.csv { send_data @students.to_csv }
+      format.csv { send_data @students.to_csv(['email', 'first_name', 'last_name']) }
     end
   end
 

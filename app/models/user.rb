@@ -3,9 +3,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
 after_update :create_schedules_in_sheets
 
-
   devise :database_authenticatable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable
   belongs_to :grade, optional: true
   belongs_to :usertype, optional: true
 
@@ -36,38 +35,35 @@ after_update :create_schedules_in_sheets
     where("#{field_name} like ?", "%#{param}%")
   end
   #
-  def self.full_search(param)
+  def self.full_search(search)
+    find_by_sql "SELECT u.id, u.first_name || ' ' || u.last_name as fullname FROM users u WHERE fullname LIKE '%#{search}%'"
+  end
+
+  def self.full_name_search(search)
     param.strip!
-    to_send_back = (full_name_search(param)).uniq
+    to_send_back = User.select("first_name || ' ' || last_name as FullName").where("FullName LIKE ?", "%#{param}%")
     return nil unless to_send_back
     to_send_back
   end
 
-  def self.full_name_search(search)
-    @names = search.split(" ")
-    where("first_name LIKE ? AND last_name LIKE ?", "%#{@names[0]}%","%#{@names[1]}%" )
+  def self.to_csv(fields = column_names, options = {})
+
+    CSV.generate(options) do |csv|
+      csv << fields
+      all.each do |user|
+        csv << user.attributes.values_at(*fields)
+      end
+    end
   end
 
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
-
-      user = User.find_or_initialize_email(email)
-      user.update_attributes(row.to_hast)
-      #User.create row.to_hash
+      user_hash = row.to_hash
+      user = find_or_create_by!(email: user_hash['email'], first_name: user_hash['first_name'], last_name: user_hash['last_name'], :encrypted_password => user_hash['password'], usertype_id: 1, grade_id: 3)
+      user.update_attributes(user_hash)
     end
   end
 
-  def self.to_csv
-    attributes = %w{id email first_name last_name}
-
-    CSV.generate(headers: true) do |csv|
-      csv << attributes
-
-      all.each do |user|
-        csv << user.attributes.values_at(*attributes)
-      end
-    end
-  end
 
   def count_missing_dates
     @template = Template.joins(:year).merge(Year.where(:current_year => true))

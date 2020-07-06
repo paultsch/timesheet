@@ -5,11 +5,17 @@
   <%= link_to "Grid Edit", edit_multiple_users_path, class: "btn btn-primary" %>
   <%= link_to "Advance Grades", progress_grades_users_path, class: "btn btn-primary" %>
   <%= link_to "Bulk Delete",   bulk_delete_students_users_path, class: "btn btn-danger" %>
-
   <h3>Import Users</h3>
-  <%= form_tag import_users_path, multipart: true do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Upload Students" %>
+  <%= form_tag import_users_path, multipart: true, class: 'form-inline' do %>
+    <div class="form-group">
+      <%= link_to "Export Students", root_path(format: :csv), class: "btn btn-primary" %>
+    </div>
+    <div class="form-group">
+      <%= file_field_tag :file %>
+    </div>
+    <div class="form-group">
+      <%= submit_tag "Upload Students", class: "btn btn-info" %>
+    </div>
   <% end %>
 </div>
 <table class="table table-striped">
