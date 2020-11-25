@@ -54,7 +54,7 @@ before_action :require_admin
   def add_date_to_sheets(template, date)
     @users = User.where(template_id: template)
     @users.each do |user|
-      Sheet.create(user_id: user.id, template_id: template, date: date)
+      Sheet.create(user_id: user.id, template_id: template, date: date, signed_in: false)
     end
   end
 
