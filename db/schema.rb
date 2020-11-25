@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_09_190957) do
+ActiveRecord::Schema.define(version: 2020_11_25_190551) do
 
   create_table "grades", force: :cascade do |t|
     t.integer "grade_level"
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2020_06_09_190957) do
     t.integer "user_id"
     t.integer "template_id"
     t.date "date"
-    t.boolean "signed_in"
+    t.boolean "signed_in", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["template_id"], name: "index_sheets_on_template_id"
